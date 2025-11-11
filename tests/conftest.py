@@ -1,6 +1,10 @@
+from datetime import date
 from typing import Any
 
+import pandas as pd
 import pytest
+
+from fund_analysis.enums import Currency
 
 
 @pytest.fixture
@@ -33,3 +37,23 @@ def clean_record_dict() -> dict[str, Any]:
         "Cashflow Amount Base": 15,
         "Base Currency": "EUR",
     }
+
+
+@pytest.fixture
+def simple_cashflow_df() -> pd.DataFrame:
+    """Simple cashflow schedule."""
+    return pd.DataFrame(
+        {"date": [date(2025, 1, 1), date(2026, 1, 1)], "cashflow_amount": [-1000.0, 1100.0]}
+    )
+
+
+@pytest.fixture
+def multi_currency_cashflow_df() -> pd.DataFrame:
+    """Multi-currency cashflow schedule."""
+    return pd.DataFrame(
+        {
+            "date": [date(2025, 1, 1), date(2026, 1, 1), date(2025, 1, 1), date(2026, 1, 1)],
+            "local_currency": [Currency.GBP, Currency.GBP, Currency.USD, Currency.USD],
+            "cashflow_amount_local": [-1000.0, 1095.0, -1000.0, 1120.0],
+        }
+    )

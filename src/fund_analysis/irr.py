@@ -13,6 +13,9 @@ def calculate_irr(
     Returns:
         - IRR: float
     """
+    if df.empty:
+        return None
+
     cashflow_series = df[[date_col, amount_col]].copy().sort_values(date_col)
 
     if not is_conventional_cash_flow(cashflow_series[amount_col]):
