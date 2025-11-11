@@ -2,7 +2,7 @@ import datetime
 from typing import Any
 
 from dateutil import parser
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from fund_analysis.enums import CashflowType, Currency
 
@@ -36,5 +36,4 @@ class CashflowRecord(BaseModel):
             return parser.parse(clean, dayfirst=True)
         return v
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
