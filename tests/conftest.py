@@ -57,3 +57,16 @@ def multi_currency_cashflow_df() -> pd.DataFrame:
             "cashflow_amount_local": [-1000.0, 1095.0, -1000.0, 1120.0],
         }
     )
+
+
+@pytest.fixture
+def sample_nav_df() -> pd.DataFrame:
+    """Simple NAV schedule for testing."""
+    return pd.DataFrame(
+        {
+            "date": [date(2025, 9, 30), date(2025, 12, 31), date(2026, 3, 31)],
+            "GBP": [-100.0, -90.0, 10.0],
+            "EUR": [-150.0, -140.0, 50.0],
+            "USD": [-200.0, -190.0, 100.0],
+        }
+    )
