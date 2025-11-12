@@ -4,7 +4,7 @@ from typing import Any
 from dateutil import parser
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from fund_analysis.enums import CashflowType, Currency
+from fund_analysis.enums import CashflowType, Currency, Side
 
 CURRENCY_TYPO_MAP = {"GPB": "GBP"}
 
@@ -37,3 +37,33 @@ class CashflowRecord(BaseModel):
         return v
 
     model_config = ConfigDict(populate_by_name=True)
+
+
+class ForwardFXTrade(BaseModel):
+    trade_date: datetime.date
+    delivery_date: datetime.date
+    foreign_currency: Currency
+    base_currency: Currency
+    action: Side
+    foreign_notional_amount: float
+
+    @property
+    def currency_pair_str(self) -> str:
+        return f"{self.foreign_currency.name}/{self.base_currency.name}"
+
+    @property
+    def direction(self) -> str:
+        other = "BUY" if self.action == Side.SELL else "SELL"
+        return (
+            f"{self.action.name} {self.foreign_currency.name} / {other} {self.base_currency.name}"
+        )
+
+    def to_export_row(self) -> dict[str, Any]:
+        return {
+            "pair": self.currency_pair_str,
+            "trade_date": self.trade_date,
+            "delivery_date": self.delivery_date,
+            "direction": self.direction,
+            "notional_currency": self.foreign_currency.name,
+            "notional_amount": self.foreign_notional_amount,
+        }

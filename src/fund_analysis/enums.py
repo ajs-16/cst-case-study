@@ -11,3 +11,8 @@ class Currency(StrEnum):
     GBP = "GBP"
     EUR = "EUR"
     USD = "USD"
+
+
+class Side(StrEnum):
+    BUY = "Buy"
+    SELL = "Sell"
