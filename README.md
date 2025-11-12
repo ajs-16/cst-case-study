@@ -22,8 +22,9 @@ This repository contains my solution to the **CST Case Study**. The program read
 2. Install package
 
     ```bash
-    pip install -e "." # Runtime dependencies only
-    pip install -e ".[dev]" # Runtime and development dependencies
+    pip install . # Runtime dependencies only
+    pip install ".[dev]" # Runtime and development dependencies
+    pip install -e ".[dev]" # Editable install for development
     ```
 
 ## Usage
