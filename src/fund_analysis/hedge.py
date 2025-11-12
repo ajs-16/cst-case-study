@@ -14,7 +14,7 @@ def propose_trades(
     use_next_nav_date: bool = False,
 ) -> list[ForwardFXTrade]:
     """
-    Propose £M rolling FX forward contract trades that hedge 100% of non-base NAV exposure.
+    Propose 3-month rolling FX forward contract trades that hedge 100% of non-base NAV exposure.
 
     - NAV < 0 = long foreign exposure, SELL foregin / BUY base.
     - NAV > 0 = short foreign exposure, BUY foregin / SELL base.
