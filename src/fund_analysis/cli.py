@@ -56,13 +56,13 @@ def main() -> None:
 
     irr_df = pd.DataFrame(
         [
-            {"category": k, "irr_pct": (v * 100.0) if v is not None else None}
+            {"category": k, "Annualised IRR (XIRR)": (v * 100.0) if v is not None else None}
             for k, v in sorted(irr_curr.items())
         ]
         + [
             {
                 "category": f"{args.fund}",
-                "irr_pct": (irr_fund * 100.0) if irr_fund is not None else None,
+                "Annualised IRR (XIRR)": (irr_fund * 100.0) if irr_fund is not None else None,
             }
         ]
     )
