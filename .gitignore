@@ -1,4 +1,5 @@
 data/*
+outputs/*
 
 .pytest_cache
 .mypy_cache
