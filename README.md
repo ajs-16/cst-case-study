@@ -1,9 +1,9 @@
 # Fund Analysis - CST Case Study
 
-This repository contains my solution to the **CST Case Study**. The program reads cashflow data, validates it with Pydantic models and performs three analysis tasks:
+This repository contains my solution to the **CST Case Study**. The program reads cashflow data, validates it with Pydantic models and performs three analyses:
 
 1. **Internal Rate of Return (IRR)** - at both currency and fund level.
-2. **Net Asset Value (NAV) Schedule** - Cumulative cashflows per currency.
+2. **Net Asset Value (NAV) Schedule** - cumulative cashflows per currency.
 3. **FX Hedge Proposals** - generates suggested 3-month rolling FX forward contracts to hedge 100% of foreign NAV exposure.
 
 ## Requirements
