@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from fund_analysis.cashflow import build_cashflow_schedule
 from fund_analysis.hedge import propose_trades
 from fund_analysis.io import load_and_validate
 from fund_analysis.irr import irr_base, irr_by_currency
@@ -67,9 +68,12 @@ def main() -> None:
         ]
     )
 
-    nav_df = build_nav_schedule(df_fund)
+    cashflow_df = build_cashflow_schedule(df_fund)
+    nav_df = build_nav_schedule(cashflow_df, irr_curr)
 
-    trades = propose_trades(nav_df, list(fund_base_currencies)[0], use_next_nav_date=True)
+    trades = propose_trades(
+        nav_df, cashflow_df, list(fund_base_currencies)[0], use_next_nav_date=True
+    )
     trades_df = pd.DataFrame([t.to_export_row() for t in trades])
 
     if args.export:

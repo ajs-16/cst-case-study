@@ -9,22 +9,24 @@ from fund_analysis.models import ForwardFXTrade
 
 def propose_trades(
     nav_schedule: pd.DataFrame,
+    cashflow_schedule: pd.DataFrame,
     base_currency: Currency,
     months_forward: int = 3,
+    hedge_percentage: float = 1.0,
     use_next_nav_date: bool = False,
 ) -> list[ForwardFXTrade]:
     """
     Propose 3-month rolling FX forward contract trades that hedge 100% of non-base NAV exposure.
 
-    - NAV < 0 = long foreign exposure, SELL foregin / BUY base.
-    - NAV > 0 = short foreign exposure, BUY foregin / SELL base.
+    - NAV Exposure > 0 = long foreign exposure, SELL foregin / BUY base.
+    - NAV Exposure < 0 = short foreign exposure, BUY foregin / SELL base.
     """
     if nav_schedule.empty:
         return []
 
     trades: list[ForwardFXTrade] = []
 
-    for idx in range(len(nav_schedule) - 1):
+    for idx in range(1, len(nav_schedule) - 1):
         trade_date: date = nav_schedule.at[idx, "date"]
 
         if use_next_nav_date:
@@ -37,7 +39,13 @@ def propose_trades(
                 continue
 
             nav_value = nav_schedule.at[idx, currency.name]
-            action = Side.SELL if nav_value < 0 else Side.BUY
+            cashflow_value = cashflow_schedule.at[idx, currency.name]
+            nav_exposure = nav_value - cashflow_value
+
+            if nav_exposure == 0:
+                continue
+
+            action = Side.SELL if nav_exposure > 0 else Side.BUY
 
             trade = ForwardFXTrade(
                 trade_date=trade_date,
@@ -45,7 +53,7 @@ def propose_trades(
                 foreign_currency=currency,
                 base_currency=base_currency,
                 action=action,
-                foreign_notional_amount=abs(nav_value),
+                foreign_notional_amount=abs(nav_exposure) * hedge_percentage,
             )
             trades.append(trade)
 
