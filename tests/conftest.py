@@ -70,3 +70,36 @@ def sample_nav_df() -> pd.DataFrame:
             "USD": [-200.0, -190.0, 100.0],
         }
     )
+
+
+@pytest.fixture
+def irr_dict() -> dict[str, float | None]:
+    """Sample IRR dictionary."""
+    return {
+        "GBP": 0.095,
+        "EUR": 0.1,
+        "USD": 0.12,
+    }
+
+
+@pytest.fixture
+def irr_dict_missing() -> dict[str, float | None]:
+    """Sample IRR dictionary with missing value."""
+    return {
+        "GBP": None,
+        "EUR": 0.1,
+        "USD": 0.12,
+    }
+
+
+@pytest.fixture
+def cashflow_schedule_df() -> pd.DataFrame:
+    """Sample cashflow schedule (output of build_cashflow_schedule)."""
+    return pd.DataFrame(
+        {
+            "date": [date(2025, 1, 1), date(2026, 1, 1)],
+            "GBP": [-1000.0, 1095.0],
+            "EUR": [0.0, 0.0],
+            "USD": [-1000.0, 1120.0],
+        }
+    )
