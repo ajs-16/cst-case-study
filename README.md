@@ -44,6 +44,42 @@ python -m fund_analysis.cli --help
 | -o, --output | Output directory               | outputs/                                  |
 | -e, --export | Export results to output files | off                                       |
 
+## Methodology
+
+### IRR Calculation
+
+Internal Rate of Return is calculated using XIRR.
+
+-   Handles irregular cashflow timing by using exact dates
+-   Calculated separately for each currency
+-   Fund level IRR calculated using base currency cashflows
+
+### NAV Calculation
+
+The NAV schedule is calculated as the present value of remaining cashflows at each time(t).
+
+-   NAV(0) = 0 (as specified in the requirements)
+-   Cashflows at time t are included in NAV(t)
+-   Discount rate = The period IRR which is calculated from the annualised XIRR
+
+### FX Risk Hedging
+
+```
+NAV Exposure(t) = NAV(t) - Cashflow(t)
+```
+
+**Reasoning**: Cashflows occuring at time t are converted to base currency, so should be excluded from the hedge.
+
+**Direction**:
+
+-   **Positive NAV Exposure** (long foreign currency) = SELL FOREIGN / BUY BASE
+-   **Negative NAV Exposure** (short foreign currency) = BUY FOREIGN / SELL BASE
+
+**Implementation details**:
+
+-   Hedging starts at t=1 and finishes at t=n-1
+-   100% hedge ratio applied to NAV exposure
+
 ## Results / Example Outputs
 
 Pre-generated results can be found in:
