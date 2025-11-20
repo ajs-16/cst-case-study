@@ -76,6 +76,13 @@ def main() -> None:
     )
     trades_df = pd.DataFrame([t.to_export_row() for t in trades])
 
+    irr_df["Annualised IRR (XIRR)"] = irr_df["Annualised IRR (XIRR)"].round(2)
+
+    nav_numeric_cols = nav_df.select_dtypes(include="number").columns
+    nav_df[nav_numeric_cols] = nav_df[nav_numeric_cols].round(2)
+
+    trades_df["notional_amount"] = trades_df["notional_amount"].round(2)
+
     if args.export:
         args.output.mkdir(parents=True, exist_ok=True)
         irr_df.to_csv(args.output / "irr.csv", index=False)
